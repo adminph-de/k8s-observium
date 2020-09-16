@@ -1,9 +1,9 @@
 <!--
 *** To avoid retyping too much info. Do a search and replace for the following:
-*** Foobar,adminph-de, ps-code-snipes, N00ky2010, patrick.hayo@flsmidth.com
+*** Obersium (Community Edition),adminph-de, k8s-observium, N00ky2010, patrick.hayo@flsmidth.com
 -->
 
-# Foobar
+# Obersium (Community Edition)
 
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
@@ -14,22 +14,22 @@
 
 <br />
 <p align="left">
-  <a href="https://github.com/adminph-de/ps-code-snipes">
+  <a href="https://github.com/adminph-de/k8s-observium">
     <img src="images/logo.png" alt="Code Snipes" width="35%" height="35%">
   </a>
   <p align="left">
-    Foobar is a Python library for dealing with word pluralization.
+    Obersium (Community Edition) is a Python library for dealing with word pluralization.
     <br />
-    <a href="https://github.com/adminph-de/ps-code-snipes/issues">Bug Report</a>
+    <a href="https://github.com/adminph-de/k8s-observium/issues">Bug Report</a>
     ·
-    <a href="https://github.com/adminph-de/ps-code-snipes/issues">Request Feature</a>
+    <a href="https://github.com/adminph-de/k8s-observium/issues">Request Feature</a>
   </p>
 </p>
 
 
 ## Content
 
-- Foobar
+- Obersium (Community Edition)
   - [Content](#content)
   - [Installation](#installation)
   - [Usage](#usage)
@@ -40,20 +40,20 @@
 
 ## Installation
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install Obersium (Community Edition).
 
 ```bash
-pip install foobar
+pip install Obersium (Community Edition)
 ```
 
 ## Usage
 
 ```python
-import foobar
+import Obersium (Community Edition)
 
-foobar.pluralize('word') # returns 'words'
-foobar.pluralize('goose') # returns 'geese'
-foobar.singularize('phenomena') # returns 'phenomenon'
+Obersium (Community Edition).pluralize('word') # returns 'words'
+Obersium (Community Edition).pluralize('goose') # returns 'geese'
+Obersium (Community Edition).singularize('phenomena') # returns 'phenomenon'
 ```
 
 ## Contributing
@@ -72,7 +72,7 @@ Distributed under the [MIT](https://choosealicense.com/licenses/mit/) License. S
 
 ## Contact
 
-Project Link: [https://github.com/adminph-de/ps-code-snipes](https://github.com/adminph-de/ps-code-snipes)
+Project Link: [https://github.com/adminph-de/k8s-observium](https://github.com/adminph-de/k8s-observium)
 
 [Patrick Hayo](patrick.hayo@flsmidth.com)
 
@@ -89,16 +89,16 @@ Project Link: [https://github.com/adminph-de/ps-code-snipes](https://github.com/
 
 
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/adminph-de/ps-code-snipes.svg?style=flat-square
-[contributors-url]: https://github.com/adminph-de/ps-code-snipes/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/adminph-de/ps-code-snipes.svg?style=flat-square
-[forks-url]: https://github.com/adminph-de/ps-code-snipes/network/members
-[stars-shield]: https://img.shields.io/github/stars/adminph-de/ps-code-snipes.svg?style=flat-square
-[stars-url]: https://github.com/adminph-de/ps-code-snipes/stargazers
-[issues-shield]: https://img.shields.io/github/issues/adminph-de/ps-code-snipes.svg?style=flat-square
-[issues-url]: https://github.com/adminph-de/ps-code-snipes/issues
-[license-shield]: https://img.shields.io/github/license/adminph-de/ps-code-snipes.svg?style=flat-square
-[license-url]: https://github.com/adminph-de/ps-code-snipes/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/adminph-de/k8s-observium.svg?style=flat-square
+[contributors-url]: https://github.com/adminph-de/k8s-observium/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/adminph-de/k8s-observium.svg?style=flat-square
+[forks-url]: https://github.com/adminph-de/k8s-observium/network/members
+[stars-shield]: https://img.shields.io/github/stars/adminph-de/k8s-observium.svg?style=flat-square
+[stars-url]: https://github.com/adminph-de/k8s-observium/stargazers
+[issues-shield]: https://img.shields.io/github/issues/adminph-de/k8s-observium.svg?style=flat-square
+[issues-url]: https://github.com/adminph-de/k8s-observium/issues
+[license-shield]: https://img.shields.io/github/license/adminph-de/k8s-observium.svg?style=flat-square
+[license-url]: https://github.com/adminph-de/k8s-observium/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/patrickhayo/?locale=en_US
 [product-screenshot]: images/screenshot.png
