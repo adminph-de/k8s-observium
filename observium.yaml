@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: observium-dep
+  #namespace: observium
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: observium
+  template:
+    metadata:
+      labels:
+        app: observium
+    spec:
+      containers:
+      - name: observium
+        image: patrickha/observium:1.0-ssl-beta
+        ports:
+        - containerPort: 8080
+        - containerPort: 8443

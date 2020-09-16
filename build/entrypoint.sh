@@ -1,9 +1,10 @@
 #!/bin/bash
 
 # Replace dummy IP with IP of host
-HOSTNAME="$(hostname)"
-#sed -i "s|0.0.0.0|${HOSTIP}|g" /etc/apache2/apache2.conf
-echo ServerName ${HOSTNAME} >> /etc/apache2/apache2.conf
+HOSTNAME="$(hostname -i)"
+#echo ServerName ${HOSTNAME} >> /etc/apache2/apache2.conf
+sed -i "s/0.0.0.0/${HOSTNAME}/" /etc/apache2/sites-available/000-default.conf
+sed -i "s/0.0.0.0/${HOSTNAME}/" /etc/apache2/sites-available/000-default-ssl.conf
 
 service apache2 start
 service mysql start

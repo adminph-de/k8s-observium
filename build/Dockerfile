@@ -29,14 +29,25 @@ WORKDIR ${OBERSERIUM_INSTALL_DIR}
 RUN cp config.php.default config.php && \
     sed -i "s/USERNAME/${MYSQL_OBSERVIUM_USERNAME}/" config.php && \
     sed -i "s/PASSWORD/${MYSQL_OBSERVIUM_PASSWORD}/" config.php
-
+RUN rm html/images/login-hamster-large.png && rm html/images/brand-observium.png
+ADD login-hamster-large.png html/images/login-hamster-large.png
+ADD brand-observium.png html/images/brand-observium.png
 RUN mkdir logs && mkdir rrd && chown www-data:www-data rrd
 
 ##Apache Configuration
+WORKDIR /tmp
+RUN openssl req -new -newkey rsa:2048 -nodes -out localhost.csr -keyout localhost.key -subj "/C=DK/ST=Valby/L=Copenhagen/O=Observium/OU=CCoE/CN=localhost" && \
+    openssl x509 -in localhost.csr -out localhost.cert -req -signkey localhost.key -days 3650 && \
+    cp localhost.cert /etc/ssl/certs/localhost.crt && \
+    cp localhost.key /etc/ssl/private/localhost.key && \
+    rm localhost.*
+
 WORKDIR /etc/apache2/sites-available
 RUN rm 000-default.conf
 ADD 000-default.conf 000-default.conf
-RUN a2dismod mpm_event && a2enmod mpm_prefork && a2enmod php7.2 && a2enmod rewrite
+ADD 000-default-ssl.conf 000-default-ssl.conf
+RUN a2ensite 000-default-ssl.conf
+RUN a2dismod mpm_event && a2enmod mpm_prefork && a2enmod php7.2 && a2enmod ssl && a2enmod rewrite
 
 ##MySQL Database
 RUN usermod -d /var/lib/mysql/ mysql
