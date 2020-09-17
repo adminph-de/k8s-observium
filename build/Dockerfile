@@ -7,12 +7,12 @@ ENV MYSQL_OBSERVIUM_PASSWORD ZK%Oeg@f6!0h
 ENV OBERSERIUM_INSTALL_DIR /opt/observium
 ##Certificate Subject
 ENV CERT_SUBJ /C=DK/ST=Valby/L=Copenhagen/O=Observium/OU=CCoE/CN=localhost
-
 ##Necessary to auto configure: tzdata
 ENV DEBIAN_FRONTEND noninteractive
 
 ##Install Dependencies
-RUN apt-get -y update && apt-get install -y curl wget iputils-ping && \
+RUN apt-get -y update && \
+    apt-get install -y curl wget iputils-ping && \
     apt-get install -y libapache2-mod-php7.2 php7.2-cli php7.2-mysql php7.2-mysqli php7.2-gd php7.2-json php-pear && \
     apt-get install -y snmp && \
     apt-get install -y fping && \
@@ -53,14 +53,13 @@ RUN a2dismod mpm_event && a2enmod mpm_prefork && a2enmod php7.2 && a2enmod ssl &
 
 ##MySQL Database
 RUN usermod -d /var/lib/mysql/ mysql
-
 WORKDIR ${OBERSERIUM_INSTALL_DIR}
 RUN service mysql start && service mysql status && \
     MYSQL_ROOT_PASSWORD=`cat /etc/mysql/debian.cnf | awk '/password/ {print}' | sed 's/[[:space:]]//g' | sed 's/[password=]//g' | tail -n 1` && \
     mysql -u root -p$MYSQL_ROOT_PASSWORD -e "CREATE DATABASE observium DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;" && \
     mysql -u root -p$MYSQL_ROOT_PASSWORD -e "CREATE USER 'observium'@'localhost' identified by 'ZK%Oeg@f6!0h';" && \
     mysql -u root -p$MYSQL_ROOT_PASSWORD -e "GRANT ALL ON observium.* TO 'observium'@'localhost';" && \
-    mysql -u root -p$MYSQL_ROOT_PASSWORD -e "show databases;" && \
+    mysql -u root -p$MYSQL_ROOT_PASSWORD -e "SHOW DATABASES;" && \
     ./discovery.php -u && \
     ./adduser.php demo demo 10
 
