@@ -5,6 +5,8 @@ ENV MYSQL_OBSERVIUM_USERNAME observium
 ENV MYSQL_OBSERVIUM_PASSWORD ZK%Oeg@f6!0h
 #Install Dir
 ENV OBERSERIUM_INSTALL_DIR /opt/observium
+##Certificate Subject
+ENV CERT_SUBJ /C=DK/ST=Valby/L=Copenhagen/O=Observium/OU=CCoE/CN=localhost
 
 ##Necessary to auto configure: tzdata
 ENV DEBIAN_FRONTEND noninteractive
@@ -36,7 +38,7 @@ RUN mkdir logs && mkdir rrd && chown www-data:www-data rrd
 
 ##Apache Configuration
 WORKDIR /tmp
-RUN openssl req -new -newkey rsa:2048 -nodes -out localhost.csr -keyout localhost.key -subj "/C=DK/ST=Valby/L=Copenhagen/O=Observium/OU=CCoE/CN=localhost" && \
+RUN openssl req -new -newkey rsa:2048 -nodes -out localhost.csr -keyout localhost.key -subj "${CERT_SUBJ}" && \
     openssl x509 -in localhost.csr -out localhost.cert -req -signkey localhost.key -days 3650 && \
     cp localhost.cert /etc/ssl/certs/localhost.crt && \
     cp localhost.key /etc/ssl/private/localhost.key && \
