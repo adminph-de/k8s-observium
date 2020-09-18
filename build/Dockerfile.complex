@@ -43,11 +43,13 @@ RUN apt-get -y update && \
     libvirt-bin
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-##Observium Community Edition
+## Observium Installation
+#Download and unpack Observium Community Edition
 RUN mkdir -p ${OBERSERIUM_INSTALL_DIR}
 WORKDIR /opt
 RUN wget http://www.observium.org/observium-community-latest.tar.gz --no-check-certificate && \
     tar zxvf observium-community-latest.tar.gz
+#Customize Observium Installation
 WORKDIR ${OBERSERIUM_INSTALL_DIR}
 RUN mkdir -p \
     /opt/config/observium \
@@ -55,7 +57,7 @@ RUN mkdir -p \
     /opt/config/apache2/sites-available \
     /opt/config/defaults \
     /opt/config/observium/logs \
-    /opt/config/observium/rrd \
+    /opt/config/observium/rrd
 RUN chmod 755 /opt/config/observium/logs && ln -s /opt/config/observium/logs ${OBERSERIUM_INSTALL_DIR}/logs && \
     chmod 755 /opt/config/observium/rrd && chown www-data:www-data /opt/config/observium/rrd && ln -s /opt/config/observium/rrd ${OBERSERIUM_INSTALL_DIR}/rrd
 ADD *.png /opt/config/defaults/
@@ -72,14 +74,15 @@ RUN ln -s /opt/config/observium/images/login-large.png html/images/login-hamster
 ADD brand.png /opt/config/observium/images/brand.png
 RUN ln -s /opt/config/observium/images/brand.png html/images/brand-observium.png
 
-##Apache Configuration
+##Apache2 Configuration
+#Create Self-Signed-Certificate (SSL)
 WORKDIR /tmp
 RUN /usr/bin/openssl req -new -newkey rsa:2048 -nodes -out localhost.csr -keyout localhost.key -subj "${CERT_SUBJ}" && \
     /usr/bin/openssl x509 -in localhost.csr -out localhost.cert -req -signkey localhost.key -days 3650 && \
     cp localhost.cert /etc/ssl/certs/localhost.crt && \
     cp localhost.key /etc/ssl/private/localhost.key && \
     rm localhost.*
-
+#Enable default (http and https) Apache2 site for observium
 WORKDIR /etc/apache2/sites-available
 ADD *.conf /opt/config/apache2/sites-available/
 RUN rm 000-default.conf
@@ -88,7 +91,7 @@ RUN ln -s /opt/config/apache2/sites-available/000-default-ssl.conf 000-default-s
 RUN a2ensite 000-default-ssl.conf
 RUN a2dismod mpm_event && a2enmod mpm_prefork && a2enmod php7.2 && a2enmod ssl && a2enmod rewrite
 
-##MySQL Database
+##MySQL Database (local)
 RUN usermod -d /var/lib/mysql/ mysql
 WORKDIR ${OBERSERIUM_INSTALL_DIR}
 RUN service mysql start && service mysql status && \
@@ -100,6 +103,7 @@ RUN service mysql start && service mysql status && \
     ./discovery.php -u && \
     ./adduser.php demo demo 10
 
+##Add Entrypoint bash script
 ADD entrypoint.sh /usr/bin
 RUN chmod 755 /usr/bin/entrypoint.sh
 

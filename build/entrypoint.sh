@@ -21,3 +21,5 @@ sed -i "s/0.0.0.0/${HOSTNAME}/" /opt/config/apache2/sites-available/000-default-
 
 service apache2 start
 service mysql start
+
+tail -f /var/log/apache2/access.log
