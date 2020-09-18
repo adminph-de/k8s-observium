@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: observium
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: observium
+  resources:
+    requests:
+      storage: 5Gi

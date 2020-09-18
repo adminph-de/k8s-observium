@@ -15,7 +15,14 @@ spec:
     spec:
       containers:
       - name: observium
-        image: patrickha/observium:1.0-ssl-beta
+        image: patrickha/observium:latest
         ports:
         - containerPort: 8080
         - containerPort: 8443
+ #      volumeMounts:
+ #      - mountPath: "/opt/config"
+ #        name: config
+ #    volumes:
+ #    - name: config
+ #      persistentVolumeClaim:
+ #        claimName: observium
