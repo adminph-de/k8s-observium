@@ -3,17 +3,19 @@ FROM ubuntu:18.04
 #MySQL User and Password
 ENV MYSQL_OBSERVIUM_USERNAME observium
 ENV MYSQL_OBSERVIUM_PASSWORD ZK%Oeg@f6!0h
-#Install Dir
+#General Install Dir
 ENV OBERSERIUM_INSTALL_DIR /opt/observium
-##Certificate Subject
+#Configuration Files
+ENV OBERSERIUM_CONFIG_DIR /opt/config/observium
+#Defaults
+ENV DEFAULTS_DIR /opt/config/defaults
+##Apache2
+#Configuration Files
+ENV APACHE_CONFIG_DIR /opt/config/apache2
+#Certificate Subject
 ENV CERT_SUBJ /C=DK/ST=Valby/L=Copenhagen/O=Observium/OU=CCoE/CN=localhost
 ##Necessary to auto configure: tzdata
 ENV DEBIAN_FRONTEND noninteractive
-
-#VOLUME ["/opt/config", \
-#        "/opt/observium/logs", \
-#        "/opt/observium/rrd", \
-#        "/var/run/mysqld/mysqld.sock"]
 
 ##Install Dependencies
 RUN apt-get -y update && \
@@ -52,27 +54,27 @@ RUN wget http://www.observium.org/observium-community-latest.tar.gz --no-check-c
 #Customize Observium Installation
 WORKDIR ${OBERSERIUM_INSTALL_DIR}
 RUN mkdir -p \
-    /opt/config/observium \
-    /opt/config/observium/images \
-    /opt/config/apache2/sites-available \
-    /opt/config/defaults \
-    /opt/config/observium/logs \
-    /opt/config/observium/rrd
-RUN chmod 755 /opt/config/observium/logs && ln -s /opt/config/observium/logs ${OBERSERIUM_INSTALL_DIR}/logs && \
-    chmod 755 /opt/config/observium/rrd && chown www-data:www-data /opt/config/observium/rrd && ln -s /opt/config/observium/rrd ${OBERSERIUM_INSTALL_DIR}/rrd
-ADD *.png /opt/config/defaults/
-ADD *.conf /opt/config/defaults/
-ADD *.php /opt/config/defaults/
-RUN cp ${OBERSERIUM_INSTALL_DIR}/config.php.default /opt/config/observium/config.php && \
-    sed -i "s/USERNAME/${MYSQL_OBSERVIUM_USERNAME}/" /opt/config/observium/config.php && \
-    sed -i "s/PASSWORD/${MYSQL_OBSERVIUM_PASSWORD}/" /opt/config/observium/config.php && \
-    cp -nf /opt/config/observium/config.php /opt/config/defaults/. && \
-    ln -s /opt/config/observium/config.php ${OBERSERIUM_INSTALL_DIR}/config.php
+     ${OBERSERIUM_CONFIG_DIR} \
+     ${OBERSERIUM_CONFIG_DIR}/images \
+     ${APACHE_CONFIG_DIR}/sites-available \
+     ${DEFAULTS_DIR} \
+     ${OBERSERIUM_CONFIG_DIR}/logs \
+     ${OBERSERIUM_CONFIG_DIR}/rrd
+RUN chmod 755  ${OBERSERIUM_CONFIG_DIR}/logs && ln -s  ${OBERSERIUM_CONFIG_DIR}/logs ${OBERSERIUM_INSTALL_DIR}/logs && \
+    chmod 755  ${OBERSERIUM_CONFIG_DIR}/rrd && chown www-data:www-data  ${OBERSERIUM_CONFIG_DIR}/rrd && ln -s  ${OBERSERIUM_CONFIG_DIR}/rrd ${OBERSERIUM_INSTALL_DIR}/rrd
+ADD *.png  ${DEFAULTS_DIR}/
+ADD *.conf ${DEFAULTS_DIR}/
+ADD *.php  ${DEFAULTS_DIR}/
+RUN cp ${OBERSERIUM_INSTALL_DIR}/config.php.default ${OBERSERIUM_CONFIG_DIR}/config.php && \
+    sed -i "s/USERNAME/${MYSQL_OBSERVIUM_USERNAME}/" ${OBERSERIUM_CONFIG_DIR}/config.php && \
+    sed -i "s/PASSWORD/${MYSQL_OBSERVIUM_PASSWORD}/" ${OBERSERIUM_CONFIG_DIR}/config.php && \
+    cp -nf  ${OBERSERIUM_CONFIG_DIR}/config.php ${DEFAULTS_DIR}/. && \
+    ln -s  ${OBERSERIUM_CONFIG_DIR}/config.php ${OBERSERIUM_INSTALL_DIR}/config.php
 RUN rm html/images/login-hamster-large.png && rm html/images/brand-observium.png
-ADD login-large.png /opt/config/observium/images/login-large.png
-RUN ln -s /opt/config/observium/images/login-large.png html/images/login-hamster-large.png
-ADD brand.png /opt/config/observium/images/brand.png
-RUN ln -s /opt/config/observium/images/brand.png html/images/brand-observium.png
+ADD login-large.png  ${OBERSERIUM_CONFIG_DIR}/images/login-large.png
+RUN ln -s  ${OBERSERIUM_CONFIG_DIR}/images/login-large.png html/images/login-hamster-large.png
+ADD brand.png ${OBERSERIUM_CONFIG_DIR}/images/brand.png
+RUN ln -s ${OBERSERIUM_CONFIG_DIR}/images/brand.png html/images/brand-observium.png
 
 ##Apache2 Configuration
 #Create Self-Signed-Certificate (SSL)
@@ -84,10 +86,10 @@ RUN /usr/bin/openssl req -new -newkey rsa:2048 -nodes -out localhost.csr -keyout
     rm localhost.*
 #Enable default (http and https) Apache2 site for observium
 WORKDIR /etc/apache2/sites-available
-ADD *.conf /opt/config/apache2/sites-available/
 RUN rm 000-default.conf
-RUN ln -s /opt/config/apache2/sites-available/000-default.conf 000-default.conf
-RUN ln -s /opt/config/apache2/sites-available/000-default-ssl.conf 000-default-ssl.conf
+ADD *.conf ${APACHE_CONFIG_DIR}/sites-available/
+RUN ln -s  ${APACHE_CONFIG_DIR}/sites-available/000-default.conf 000-default.conf
+RUN ln -s  ${APACHE_CONFIG_DIR}/sites-available/000-default-ssl.conf 000-default-ssl.conf
 RUN a2ensite 000-default-ssl.conf
 RUN a2dismod mpm_event && a2enmod mpm_prefork && a2enmod php7.2 && a2enmod ssl && a2enmod rewrite
 
