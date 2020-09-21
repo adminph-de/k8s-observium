@@ -1,0 +1,16 @@
+|-- config
+|   |-- apache2
+|   |   `-- sites-available
+|   |-- defaults
+|   `-- observium
+|       |-- images
+|       |-- logs
+|       `-- rrd
+
+docker container run --name observium \
+    -p 9080:80 \
+    -p 9443:443 \
+    -v obs_config:/opt/config/obsobservium \
+    -v obs_apache:/opt/config/apache2 \
+    -v obs_mysql:/var/lib/mysql \
+    patrickha/observium:2.0-beta
