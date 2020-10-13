@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: adminphdeksobservium 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: adminphdeksobservium
+  template:
+    metadata:
+      labels:
+        app: adminphdeksobservium 
+    spec:
+      containers:
+        - name: adminphdeksobservium 
+          image: k8scr01t.azurecr.io/adminphdeksobservium
+          ports:
+          - containerPort: 80
